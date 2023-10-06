@@ -1,0 +1,29 @@
+<%- include('partials/header'); -%> <% if(user){ %>
+<ul class="recipes">
+  <li class="recipe">
+    <a href="/client">
+      <img src="/qrCode.png" alt="smoothie recipe icon" />
+      <h4>Client Whatsapp</h4>
+      <p>Add Client, Scan Qr Code</p>
+    </a>
+  </li>
+  <li class="recipe">
+    <a href="#">
+      <img src="/chat.png" alt="smoothie recipe icon" />
+      <h4>Chat</h4>
+      <p>Chat Whatsapp</p>
+    </a>
+  </li>
+</ul>
+<% }else{ %>
+<header>
+  <div class="smoothie">
+    <img src="/whatsapp-api.png" alt="" />
+  </div>
+  <div class="headings">
+    <h2>Whatsapp Blast</h2>
+    <h3>By Aries</h3>
+    <a href="/login" class="btn">Log in</a>
+  </div>
+</header>
+<% } %> <%- include('partials/footer'); -%>

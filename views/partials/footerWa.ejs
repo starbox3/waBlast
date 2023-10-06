@@ -1,0 +1,96 @@
+<footer>Copyright 2023 Aries Ilham</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script>
+      $(document).ready(function () {
+        var socket = io();
+
+        // Ketika button tambah diklik
+        $(".add-client-btn").click(function () {
+          var clientId = $("#client-id").val();
+          var clientDescription = $("#client-description").val();
+
+          /**
+           * Some peoples want to use the phone number as the ID
+           * But because we use the ID as the html class attribute value: class="<The ID>"
+           * It won't work. Read more on https://www.w3.org/TR/REC-html40/types.html#type-cdata
+           *
+           * So, here we add the prefix to solve that problem
+           * Each ID will automatically added a 'client-' prefix for the class attribute
+           */
+          var clientClass = "client-" + clientId;
+          var template = $(".client")
+            .first()
+            .clone()
+            .removeClass("hide")
+            .addClass(clientClass);
+
+          template.find(".title").html(clientId);
+          template.find(".description").html(clientDescription);
+          template.find(".logs").append($("<li>").text("hello..."));
+          $(".client-container").append(template);
+
+          socket.emit("create-session", {
+            id: clientId,
+            description: clientDescription,
+          });
+        });
+
+        socket.on("init", function (data) {
+          $(".client-container .client").not(":first").remove();
+          console.log(data);
+          for (var i = 0; i < data.length; i++) {
+            var session = data[i];
+
+            var clientId = session.id;
+            var clientDescription = session.description;
+
+            var clientClass = "client-" + clientId;
+            var template = $(".client")
+              .first()
+              .clone()
+              .removeClass("hide")
+              .addClass(clientClass);
+
+            template.find(".title").html(clientId);
+            template.find(".description").html(clientDescription);
+            $(".client-container").append(template);
+
+            if (session.ready) {
+              $(`.client.${clientClass} .logs`).prepend(
+                $("<li>").text("Whatsapp is ready!")
+              );
+            } else {
+              $(`.client.${clientClass} .logs`).prepend(
+                $("<li>").text("Connecting...")
+              );
+            }
+          }
+        });
+
+        socket.on("remove-session", function (id) {
+          $(`.client.client-${id}`).remove();
+        });
+
+        socket.on("message", function (data) {
+          $(`.client.client-${data.id} .logs`).prepend(
+            $("<li>").text(data.text)
+          );
+        });
+
+        socket.on("qr", function (data) {
+          $(`.client.client-${data.id} #qrcode`).attr("src", data.src);
+          $(`.client.client-${data.id} #qrcode`).show();
+        });
+
+        socket.on("ready", function (data) {
+          $(`.client.client-${data.id} #qrcode`).hide();
+        });
+
+        socket.on("authenticated", function (data) {
+          $(`.client.client-${data.id} #qrcode`).hide();
+        });
+      });
+    </script>
+  </body>
+</html>
