@@ -1,0 +1,25 @@
+<%- include('partials/header'); -%>
+<p><a href="/">< Kembali</a></p>
+<br />
+<div id="app">
+  <h1>Whatsapp API</h1>
+  <p>Powered by Aries</p>
+  <div class="form-container">
+    <label for="client-id">Phone</label>
+    <input
+      type="number"
+      id="client-id"
+      name="phone"
+      placeholder="Masukkan Nomor Telepon" />
+    <br />
+    <label for="client-description">Message</label>
+    <textarea
+      name="message"
+      rows="3"
+      id="client-description"
+      placeholder="Masukkan Pesan"></textarea>
+    <br />
+    <button type="submit" class="add-client-btn">Kirim Pesan</button>
+  </div>
+</div>
+<%- include('partials/footer'); -%>

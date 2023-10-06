@@ -8,6 +8,7 @@ router.get("/login", checkLog, authController.login_get);
 router.post("/login", authController.login_post);
 router.get("/logout", authController.logout_get);
 router.get("/client", requireAuth, authController.client_get);
+router.get("/chat", requireAuth, authController.chat_get);
 // router.post("/send-message", authController.sendMessage_post);
 
 module.exports = router;

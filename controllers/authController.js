@@ -78,3 +78,6 @@ module.exports.logout_get = (req, res) => {
 module.exports.client_get = (req, res) => {
   res.render("client");
 };
+module.exports.chat_get = (req, res) => {
+  res.render("chat");
+};
